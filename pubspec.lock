@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.11.1"
+  dio_pretty_logger:
+    dependency: "direct main"
+    description:
+      name: dio_pretty_logger
+      sha256: "1b695eb491d6df6dc28c364c961394abe5304be7befe1e6574ac0c39a2e22748"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   dio_web_adapter:
     dependency: transitive
     description:

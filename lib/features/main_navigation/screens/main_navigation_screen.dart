@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme.dart';
-import '../../home/screens/home_screen.dart';
-import '../../cart/screens/cart_screen.dart';
-import '../../profile/screens/profile_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce_app_huma_volve/core/network/api_client.dart';
+import 'package:ecommerce_app_huma_volve/core/theme.dart';
+import 'package:ecommerce_app_huma_volve/features/cart/screens/cart_screen.dart';
+import 'package:ecommerce_app_huma_volve/features/home/cubit/home_cubit.dart';
+import 'package:ecommerce_app_huma_volve/features/home/screens/home_screen.dart';
+import 'package:ecommerce_app_huma_volve/features/home/service/home_service.dart';
+import 'package:ecommerce_app_huma_volve/features/profile/screens/profile_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -13,12 +17,32 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
+  late final ApiClient apiClient;
+  late final HomeService homeService;
+  late final HomeCubit homeCubit;
+  late final List<Widget> _screens;
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const CartScreen(),
-    const ProfileScreen(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    apiClient = ApiClient();
+    homeService = HomeService(apiClient);
+    homeCubit = HomeCubit(homeService);
+    _screens = [
+      BlocProvider(
+        create: (context) => homeCubit,
+        child: const HomeScreen(),
+      ),
+      const CartScreen(),
+      const ProfileScreen(),
+    ];
+  }
+
+  @override
+  void dispose() {
+    homeCubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,24 +1,18 @@
-import 'package:ecommerce_app_huma_volve/features/home/models/category_model.dart';
+import 'package:ecommerce_app_huma_volve/features/home/data/models/category_model.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/entities/product_entity.dart';
 
-class ProductModel {
-  final int id;
-  final String title;
-  final String slug;
-  final double price;
-  final String description;
-  final CategoryModel category;
-  final List<String> images;
+class ProductModel extends ProductEntity {
   final String creationAt;
   final String updatedAt;
 
   ProductModel({
-    required this.id,
-    required this.title,
-    required this.slug,
-    required this.price,
-    required this.description,
-    required this.category,
-    required this.images,
+    super.id,
+    super.title,
+    super.slug,
+    super.price,
+    super.description,
+    super.category,
+    super.images,
     required this.creationAt,
     required this.updatedAt,
   });
@@ -51,7 +45,8 @@ class ProductModel {
       slug: json['slug'] as String? ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       description: json['description'] as String? ?? '',
-      category: json['category'] != null && json['category'] is Map<String, dynamic>
+      category:
+          json['category'] != null && json['category'] is Map<String, dynamic>
           ? CategoryModel.fromJson(json['category'] as Map<String, dynamic>)
           : CategoryModel(
               id: 0,
@@ -65,19 +60,5 @@ class ProductModel {
       creationAt: json['creationAt'] as String? ?? '',
       updatedAt: json['updatedAt'] as String? ?? '',
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'slug': slug,
-      'price': price,
-      'description': description,
-      'category': category.toJson(),
-      'images': images,
-      'creationAt': creationAt,
-      'updatedAt': updatedAt,
-    };
   }
 }

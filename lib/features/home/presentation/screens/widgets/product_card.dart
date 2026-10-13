@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app_huma_volve/core/dummy_data.dart';
 import 'package:ecommerce_app_huma_volve/core/theme.dart';
 import 'package:ecommerce_app_huma_volve/features/details/screens/product_details_screen.dart';
-import 'package:ecommerce_app_huma_volve/features/home/models/product_model.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/entities/product_entity.dart';
 
 class ProductCard extends StatelessWidget {
-  final ProductModel product;
+  final ProductEntity product;
 
   const ProductCard({super.key, required this.product});
 
@@ -21,20 +20,20 @@ class ProductCard extends StatelessWidget {
             transitionDuration: const Duration(milliseconds: 500),
             pageBuilder: (context, animation, secondaryAnimation) =>
                 ProductDetailsScreen(
-              product: Product(
-                id: product.id.toString(),
-                name: product.title,
-                description: product.description,
-                price: product.price,
-                imageUrl: imageUrl,
-                colors: const [Colors.black, Colors.blue, Colors.grey],
-                sizes: const ['S', 'M', 'L', 'XL'],
-              ),
-            ),
+                  product: ProductEntity(
+                    id: product.id,
+                    title: product.title,
+                    slug: product.slug,
+                    price: product.price,
+                    description: product.description,
+                    category: product.category,
+                    images: product.images,
+                  ),
+                ),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
+                  return FadeTransition(opacity: animation, child: child);
+                },
           ),
         );
       },
@@ -61,8 +60,9 @@ class ProductCard extends StatelessWidget {
                   Hero(
                     tag: 'product-${product.id}',
                     child: ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(24)),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(24),
+                      ),
                       child: Image.network(
                         imageUrl,
                         fit: BoxFit.cover,

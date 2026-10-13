@@ -1,14 +1,14 @@
-class CategoryModel {
-  final int id;
-  final String name;
+import 'package:ecommerce_app_huma_volve/features/home/domain/entities/category_entity.dart';
+
+class CategoryModel extends CategoryEntity {
   final String slug;
   final String image;
   final String creationAt;
   final String updatedAt;
 
   CategoryModel({
-    required this.id,
-    required this.name,
+    super.id,
+    super.name,
     required this.slug,
     required this.image,
     required this.creationAt,
@@ -35,16 +35,5 @@ class CategoryModel {
       creationAt: json['creationAt'] as String? ?? '',
       updatedAt: json['updatedAt'] as String? ?? '',
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'slug': slug,
-      'image': image,
-      'creationAt': creationAt,
-      'updatedAt': updatedAt,
-    };
   }
 }

@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:ecommerce_app_huma_volve/core/dummy_data.dart';
 import 'package:ecommerce_app_huma_volve/core/theme.dart';
-import 'package:ecommerce_app_huma_volve/features/home/cubit/home_cubit.dart';
-import 'package:ecommerce_app_huma_volve/features/home/cubit/home_states.dart';
-import 'package:ecommerce_app_huma_volve/features/home/widgets/product_card.dart';
-import 'package:ecommerce_app_huma_volve/features/home/widgets/category_chip.dart';
+import 'package:ecommerce_app_huma_volve/features/home/presentation/managers/cubits/cubit/home_cubit.dart';
+import 'package:ecommerce_app_huma_volve/features/home/presentation/managers/cubits/cubit/home_states.dart';
+import 'package:ecommerce_app_huma_volve/features/home/presentation/screens/widgets/product_card.dart';
+import 'package:ecommerce_app_huma_volve/features/home/presentation/screens/widgets/category_chip.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     });
                                     context
                                         .read<HomeCubit>()
-                                        .loadProductsByCategory(category.id);
+                                        .getProductsByCategoryId(category.id);
                                   },
                                 );
                               },

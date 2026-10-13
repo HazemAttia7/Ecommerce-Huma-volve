@@ -4,10 +4,18 @@ import 'package:ecommerce_app_huma_volve/core/errors/failure_model.dart';
 class ErrorHandler {
   static Failure handle(dynamic exception) {
     if (exception is DioException) {
+      final responseData = exception.response?.data;
+      if (responseData is Map && responseData['message'] != null) {
+        final message = responseData['message'];
+        if (message is List) {
+          return Failure(errMessage: message.join('\n'));
+        }
+        return Failure(errMessage: message.toString());
+      }
       return _handleRemoteError(exception.toString());
     }
 
-    return Failure(errMessage: 'Un Expected Error');
+    return const Failure(errMessage: 'Un Expected Error');
   }
 
   static Failure _handleRemoteError(String message) {

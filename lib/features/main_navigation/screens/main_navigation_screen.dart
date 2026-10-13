@@ -1,11 +1,16 @@
+import 'package:ecommerce_app_huma_volve/features/home/data/data_source/home_repo_impl.dart';
+import 'package:ecommerce_app_huma_volve/features/home/data/data_sources/home_remote_data_source.dart';
+import 'package:ecommerce_app_huma_volve/features/home/data/data_sources/home_remote_data_source_impl.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/repos/home_repo.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/use_cases/get_categories_use_case.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/use_cases/get_products_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app_huma_volve/core/network/api_client.dart';
 import 'package:ecommerce_app_huma_volve/core/theme.dart';
 import 'package:ecommerce_app_huma_volve/features/cart/screens/cart_screen.dart';
-import 'package:ecommerce_app_huma_volve/features/home/cubit/home_cubit.dart';
-import 'package:ecommerce_app_huma_volve/features/home/screens/home_screen.dart';
-import 'package:ecommerce_app_huma_volve/features/home/service/home_service.dart';
+import 'package:ecommerce_app_huma_volve/features/home/presentation/managers/cubits/cubit/home_cubit.dart';
+import 'package:ecommerce_app_huma_volve/features/home/presentation/screens/home_screen.dart';
 import 'package:ecommerce_app_huma_volve/features/profile/screens/profile_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -18,7 +23,10 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
   late final ApiClient apiClient;
-  late final HomeService homeService;
+  late final HomeRemoteDataSource homeRemoteDataSource;
+  late final HomeRepo homeRepo;
+  late final GetCategoriesUseCase getCategoriesUseCase;
+  late final GetProductsUseCase getProductsUseCase;
   late final HomeCubit homeCubit;
   late final List<Widget> _screens;
 
@@ -26,13 +34,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   void initState() {
     super.initState();
     apiClient = ApiClient();
-    homeService = HomeService(apiClient);
-    homeCubit = HomeCubit(homeService);
+    homeRemoteDataSource = HomeRemoteDataSourceImpl(apiClient);
+    homeRepo = HomeRepoImpl(remoteDataSource: homeRemoteDataSource);
+    getCategoriesUseCase = GetCategoriesUseCase(homeRepo);
+    getProductsUseCase = GetProductsUseCase(homeRepo);
+    homeCubit = HomeCubit(getCategoriesUseCase, getProductsUseCase);
     _screens = [
-      BlocProvider(
-        create: (context) => homeCubit,
-        child: const HomeScreen(),
-      ),
+      BlocProvider(create: (context) => homeCubit, child: const HomeScreen()),
       const CartScreen(),
       const ProfileScreen(),
     ];

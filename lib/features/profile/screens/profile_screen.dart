@@ -1,8 +1,9 @@
+import 'package:ecommerce_app_huma_volve/core/storage/secured_storage.dart';
 import 'package:flutter/material.dart';
 import '../../../core/dummy_data.dart';
 import '../../../core/theme.dart';
 import '../widgets/profile_menu_item.dart';
-import '../../auth/login/screens/login_screen.dart';
+import 'package:ecommerce_app_huma_volve/features/auth/presentation/screens/login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -98,16 +99,19 @@ class ProfileScreen extends StatelessWidget {
                     icon: Icons.logout,
                     title: 'Logout',
                     isDestructive: true,
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(opacity: animation, child: child);
-                          },
-                        ),
-                      );
+                    onTap: () async {
+                      await SecureStorage.deleteTokens();
+                      if (context.mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(opacity: animation, child: child);
+                            },
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],
